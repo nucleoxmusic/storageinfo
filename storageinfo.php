@@ -11,7 +11,7 @@ define("DS", DIRECTORY_SEPARATOR);
 /*********************************************************************/
 
 /* script version */
-$version = "1.1";
+$version = "1.0";
 
 
 ?>
@@ -1309,7 +1309,7 @@ function update($root, $url, $tmp) {
                 </div>
 
                 <br>
-                <div class="card" id="errorConfigCard" style="padding-left: 10px; padding-right: 10px; display: none">
+                <div class="card" id="errorConfigCard" style="padding-left: 10px; padding-right: 10px;display: none">
                     <div class="card-body">
                         <h4 class="card-title">Error on configuration detected!</h4>
                         <hr>
@@ -1319,6 +1319,8 @@ function update($root, $url, $tmp) {
                             if(empty($root) || empty($url)) {
                                 echo"Some necessary config parameters are missing from the config lines, add it to continue using script without further errors. <br><br> <button type='button' class='btn btn-primary' data-toggle='modal' data-target='#Config'>Press here to configure</button><br>";
                                 echo "<script type='text/javascript'> showErrorConfigMessage() </script>";
+                                echo "<br>";
+                                echo "<i class='text-muted'>If this message still appears after applying changes, refresh this tab</i>";
                             }
 
                             ?>
@@ -1326,7 +1328,7 @@ function update($root, $url, $tmp) {
                     </div>
                 </div>
 
-                <div class="card" id="sucesConfigCard" style="padding-left: 10px; padding-right: 10px; display: none">
+                <div class="card" id="sucesConfigCard" style="padding-left: 10px; padding-right: 10px; margin-top: 40px;display: none">
                     <div class="card-body">
                         <h4 class="card-title">Configuration succesfully applied!</h4>
                         <hr>
@@ -1371,6 +1373,9 @@ function update($root, $url, $tmp) {
 
                                     echo "<script type='text/javascript'> showSucesConfigMessage() </script>";
                                     echo "<b>Changes succesfully applied, <a href='$new_url/storageinfo.php'> click here</a> to go to new location, after redirecting scan to update all scripts copied on disk</b>";
+                                    echo "<br>";
+                                    echo "<br>";
+                                    echo "<i class='text-muted'>If changes are not applied after saving configuration, refresh this tab clearing cache ( Ctrl+F5 )</i>";
                                 } else {
                                     header("Location: storageinfo.php");
                                 }
