@@ -462,9 +462,6 @@ function update($root, $url, $tmp) {
     fclose($_tmpfile);
     unlink($_tmpfile);
     unlink($tmp);
-
-    echo "<hr>";
-    echo "<b>Update has finished, starting scan...</b>";
 }
 
 ?>
@@ -1400,12 +1397,8 @@ function update($root, $url, $tmp) {
                                 echo "<script type='text/javascript'> updateSucesssMessage() </script>";
 
                                 if(copy("https://raw.githubusercontent.com/nucleoxmusic/storageinfo/master/storageinfo.php", "$tmpName")) {
-                                    echo "<b>Update succesfully retrieved from repository, update and scan on progress</b>";
+                                    echo "<b>Update succesfully retrieved from repository,  <br><br> <a type='button' class='btn btn-primary' data-toggle='modal' data-target='#Config'>Proceed here to rescan</a><br></b>";
                                     update($root, $url, $tmpName);
-                                    if(recursiveScan($current)) {
-                                        echo "<hr>";
-                                        echo "<b>Update and scan finished, <a href='storageinfo.php'>click here</a> to go to root</b>";
-                                    }
                                 } else {
                                     echo "<b>There was an error updating, <a href='storageinfo.php?update=true'>click here</a> to retry</b>";
                                 }
