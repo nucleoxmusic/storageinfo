@@ -11,7 +11,7 @@ define("DS", DIRECTORY_SEPARATOR);
 /*********************************************************************/
 
 /* script version */
-$version = "1.5";
+$version = "1.1";
 
 
 ?>
@@ -384,23 +384,27 @@ function openDirectory($path, $url) {
     }
 }
 function recursiveScan($dir) {
-    $tree = glob(rtrim($dir, '/') . '/*');
-    if (is_array($tree)) {
-        foreach($tree as $file) {
-            if (is_dir($file)) {
-                copy("storageinfo.php", "$file/storageinfo.php");
-                recursiveScan($file);
+    if(!empty($dir)) {
+        $tree = glob(rtrim($dir, '/') . '/*');
+        if (is_array($tree)) {
+            foreach($tree as $file) {
+                if (is_dir($file)) {
+                    copy("storageinfo.php", "$file/storageinfo.php");
+                    recursiveScan($file);
+                }
             }
         }
     }
 }
 function recursiveScanDel($dir) {
-    $tree = glob(rtrim($dir, '/') . '/*');
-    if (is_array($tree)) {
-        foreach($tree as $file) {
-            if (is_dir($file)) {
-                unlink("$file/storageinfo.php");
-                recursiveScan($file);
+    if(!empty($dir)) {
+        $tree = glob(rtrim($dir, '/') . '/*');
+        if (is_array($tree)) {
+            foreach($tree as $file) {
+                if (is_dir($file)) {
+                    unlink("$file/storageinfo.php");
+                    recursiveScan($file);
+                }
             }
         }
     }
@@ -425,17 +429,15 @@ function indexerChecker($cwd, $root) {
 }
 /******************************************************************/
 
-function update($root, $url) {
-    copy("https://carlosarellano.com/storageinfo.php", "download_tmp.php");
-
+function update($root, $url, $tmp) {
     $file_output = "";
     $_tmpOutput  = "";
 
     $root_update = $root;
     $url_update = $url;
 
-    $archivo = fopen ("download_tmp.php","r");
-    $_tmpfile = fopen("_tmp.php", "w+");
+    $archivo = fopen ($tmp,"r");
+    $_tmpfile = fopen("_tmp.php", "w");
 
 
     $contador = 0;
@@ -455,9 +457,14 @@ function update($root, $url) {
     $file_output .= $_tmpOutput;
 
     fwrite($_tmpfile, $file_output);
-    /* unlink("storageinfo.php");*/
-    rename("_tmp.php", "result.txt");
+    unlink("storageinfo.php");
+    copy("_tmp.php", "storageinfo.php");
     fclose($_tmpfile);
+    unlink($_tmpfile);
+    unlink($tmp);
+
+    echo "<hr>";
+    echo "<b>Update has finished, starting scan...</b>";
 }
 
 ?>
@@ -981,7 +988,10 @@ function update($root, $url) {
         $("#status").html("<b>Scan on selected folder, please wait...</b>");
     }
     function  showUpdate() {
-        $("#status").html("<b>Script is being updated on all disk, please wait...</b>");
+        $("#status").html("<b>Script update started, please wait...</b>");
+    }
+    function  showUpdateCur() {
+        $("#status").html("<b>Script update on progress</b>");
     }
     function  deleteIndexing() {
         $("#status").html("</b>Indexing is being deleted from disk, please wait...</b>");
@@ -1269,7 +1279,7 @@ function update($root, $url) {
                                     </button>
                                     <div class="dropdown-menu">
                                         <h6 class="dropdown-header">More options</h6>
-                                        <button type="submit" class="dropdown-item btn btn-outline-dark" name="update" value="" onclick="showUpdate()">Update and scan</button>
+                                        <button type="submit" class="dropdown-item btn btn-outline-dark" name="update" value="true" onclick="showUpdate()">Update and scan</button>
                                         <button type="submit" class="dropdown-item btn btn-outline-dark" name="delete" value="true" onclick="deleteIndexing()">Delete indexing</button>
                                     </div>
                                 </div>
@@ -1382,13 +1392,22 @@ function update($root, $url) {
                             <?php
 
                             if(isset($_GET['update'])) {
+                                echo "<script type='text/javascript'> showUpdateCur() </script>";
+
                                 $update = $_GET['update'];
+                                $tmpName = "download_tmp.php";
 
                                 echo "<script type='text/javascript'> updateSucesssMessage() </script>";
-                                if(update($root, $url)) {
-                                    echo "<b>Script has been succesfully updated, <a href='storageinfo.php'>click here</a> to go back</b>";
+
+                                if(copy("https://raw.githubusercontent.com/nucleoxmusic/storageinfo/master/storageinfo.php", "$tmpName")) {
+                                    echo "<b>Update succesfully retrieved from repository, update and scan on progress</b>";
+                                    update($root, $url, $tmpName);
+                                    if(recursiveScan($current)) {
+                                        echo "<hr>";
+                                        echo "<b>Update and scan finished, <a href='storageinfo.php'>click here</a> to go to root</b>";
+                                    }
                                 } else {
-                                    echo "<b>There was an error updating, <a href='storageinfo.php'>click here</a> to go back</b>";
+                                    echo "<b>There was an error updating, <a href='storageinfo.php?update=true'>click here</a> to retry</b>";
                                 }
                             }
 
