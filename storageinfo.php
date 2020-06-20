@@ -11,7 +11,7 @@ define("DS", DIRECTORY_SEPARATOR);
 /*********************************************************************/
 
 /* script version */
-$version = "1.1";
+$version = "1.0";
 
 
 ?>
