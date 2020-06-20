@@ -264,6 +264,9 @@ function detectType($extension) {
     if($extension == "htaccess") {
         return "Webdev/server config" . "&nbsp" . "<i class='fa fa-gear'></i>";
     }
+    if($extension == "db") {
+        return "Webdev/databaser" . "&nbsp" . "<i class='fa fa-database'></i>";
+    }
 
     // Image formats
     if($extension == "jpg") {
@@ -1120,6 +1123,7 @@ function update($root, $url, $tmp) {
         position: absolute;
         right: 0;
         margin-top: 10vh;
+        overflow-y: auto;
     }
 
     table.dataTable thead .sorting:after,
