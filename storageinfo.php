@@ -1397,7 +1397,7 @@ function update($root, $url, $tmp) {
                                 echo "<script type='text/javascript'> updateSucesssMessage() </script>";
 
                                 if(copy("https://raw.githubusercontent.com/nucleoxmusic/storageinfo/master/storageinfo.php", "$tmpName")) {
-                                    echo "<b>Update succesfully retrieved from repository,  <br><br> <a type='button' class='btn btn-primary text-white' data-toggle='modal' data-target='#Config'>Proceed here to rescan</a><br></b>";
+                                    echo "<b>Update succesfully retrieved from repository,  <br><br> <a type='button' class='btn btn-primary' data-toggle='modal' data-target='#Config' style='color: white'>Proceed here to rescan</a><br></b>";
                                     update($root, $url, $tmpName);
                                 } else {
                                     echo "<b>There was an error updating, <a href='storageinfo.php?update=true'>click here</a> to retry</b>";
