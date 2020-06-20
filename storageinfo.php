@@ -1,6 +1,6 @@
 <?php
-$url = "https://carlosarellano.com";
-$root = "/home/carlos/public_html";
+$url = "";
+$root = "";
 $file = "storageinfo.php";
 /* Config */
 
